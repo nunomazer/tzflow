@@ -86,6 +86,16 @@ abstract class BaseCommand extends Command {
         $this->line('');
     }
 
+    protected function displayHeader($text)
+    {
+        $this->climate->border();
+        $this->climate->br();
+        $this->climate->flank('<bold>'.$text.'</bold>', '  *  ');
+        $this->climate->br();
+        $this->climate->border();
+        $this->climate->br();
+    }
+
     protected function version() {
         return exec('git describe --tags --abbrev=0');
     }

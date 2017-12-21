@@ -23,9 +23,7 @@ class Info extends BaseCommand
 
         $padding = $this->climate->padding(40);
 
-        $this->climate->border();
-        $this->climate->flank('tzflow.json configuration used in this folder', ' ', 10);
-        $this->climate->border();
+        $this->displayHeader('tzflow.json configuration used in this folder');
 
         $driver = config('driver');
 
