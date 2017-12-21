@@ -10,6 +10,7 @@ namespace Tzflow\Gitlab;
 
 
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 use Torzer\GitlabClient\Gitlab;
 use Tzflow\Commands\BaseCommand;
 
@@ -26,7 +27,7 @@ class Service
         $this->project_id = config('gitlab.project.id');
     }
 
-    public function handle(BaseCommand $command, InputInterface $input)
+    public function handle(BaseCommand $command, InputInterface $input, OutputInterface $output)
     {
         if ($command->getName() == 'mr') {
             $cm = new MR();
@@ -36,6 +37,6 @@ class Service
             $cm = new AcceptMR();
         }
 
-        $cm->handle($this, $command, $input);
+        $cm->handle($this, $command, $input, $output);
     }
 }

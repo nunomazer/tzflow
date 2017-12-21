@@ -10,6 +10,7 @@ namespace Tzflow\Gitlab;
 
 use Carbon\Carbon;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 use Torzer\GitlabClient\Gitlab;
 use Tzflow\Commands\BaseCommand;
 use Tzflow\Git;
@@ -25,7 +26,7 @@ class AcceptMR
     public $input;
     public $mr_id;
 
-    public function handle(Service $service, BaseCommand $command, InputInterface $input)
+    public function handle(Service $service, BaseCommand $command, InputInterface $input, OutputInterface $output)
     {
         $this->command = $command;
         $this->service = $service;

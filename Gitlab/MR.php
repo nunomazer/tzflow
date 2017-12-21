@@ -8,7 +8,9 @@
 
 namespace Tzflow\Gitlab;
 
+use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 use Torzer\GitlabClient\Gitlab;
 use Tzflow\Commands\BaseCommand;
 
@@ -22,7 +24,7 @@ class MR
     public $service;
     public $input;
 
-    public function handle(Service $service, BaseCommand $command, InputInterface $input)
+    public function handle(Service $service, BaseCommand $command, InputInterface $input, OutputInterface $output)
     {
         $this->command = $command;
         $this->service = $service;
@@ -76,12 +78,20 @@ class MR
                 $this->command->climate->info('*  Calling Accept Merge  *');
                 $this->command->climate->info('--------------------------');
                 $this->command->climate->br();
-                $this->command->call('gitlab:mr-merge', [
+
+                $accept = $this->command->getApplication()->find('mr-merge');
+
+                $arguments = array(
+                    'command' => 'mr-merge',
                     'id' => $mr->iid,
-                    '--remove-source' => $this->option('remove-source'),
-                    '--update-local' => $this->option('update-local'),
-                    '--tag-after' => $this->option('tag-after'),
-                ]);
+                    '--remove-source' => $this->input->getOption('remove-source'),
+                    '--update-local' => $this->input->getOption('update-local'),
+                    '--tag-after' => $this->input->getOption('tag-after'),
+                );
+
+                $argInput = new ArrayInput($arguments);
+
+                $accept->run($argInput, $output);
             }
         } catch (\GuzzleHttp\Exception\ClientException $ex) {
             $this->command->climate->info('');

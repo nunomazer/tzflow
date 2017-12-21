@@ -91,7 +91,7 @@ abstract class BaseCommand extends Command
     {
         $this->displayLogo();
         $this->displayHeader($headerText);
-        $this->service->handle($this, $input);
+        $this->service->handle($this, $input, $output);
     }
 
     protected function version()
