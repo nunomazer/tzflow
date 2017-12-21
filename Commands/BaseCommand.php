@@ -21,6 +21,8 @@ abstract class BaseCommand extends Command {
 
     protected $description = 'Command description';
 
+    protected $help = 'This is the help of this command';
+
     protected $climate = null;
 
     public function __construct($name = null)
@@ -66,6 +68,7 @@ abstract class BaseCommand extends Command {
 
         $this->setName($this->name);
         $this->setDescription($this->description);
+        $this->setHelp($this->help);
     }
 
     /**
