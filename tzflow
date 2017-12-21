@@ -4,6 +4,14 @@ require_once __DIR__ . '/vendor/autoload.php';
 
 use Symfony\Component\Console\Application;
 
+if ( ! function_exists('config')) {
+    function config($key, $default = null) {
+        $config =  new PHLAK\Config\Config('./tzflow.json');
+
+        return $config->get($key, $default);
+    }
+}
+
 $app = new Application('tzflow - a git flow productive application', 'by http://torzer.com');
 
 $app->addCommands([
