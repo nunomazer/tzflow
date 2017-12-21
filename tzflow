@@ -4,8 +4,10 @@ require_once __DIR__ . '/vendor/autoload.php';
 
 use Symfony\Component\Console\Application;
 
-$app = new Application();
+$app = new Application('tzflow - a git flow productive application', 'by http://torzer.com');
 
-
+$app->addCommands([
+        new \Tzflow\Commands\Info(),
+]);
 
 $app->run();
