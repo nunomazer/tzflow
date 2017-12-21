@@ -1,0 +1,43 @@
+{
+  "chmod": "0755",
+  "main": "tzflow",
+  "output": "bin/tzflow.phar",
+
+  "directories": [
+    "Commands",
+    "vendor"
+  ],
+  "files": [
+    "tzflow"
+  ],
+  "finder": [
+    {
+      "name": "*.php",
+      "exclude": [
+        "File",
+        "mikey179",
+        "Net",
+        "phpunit",
+        "phpunit-test-case",
+        "Tester",
+        "Tests",
+        "tests",
+        "yaml"
+      ],
+      "in": "vendor"
+    }
+  ],
+
+  "compactors": [
+    "Herrera\\Box\\Compactor\\Json",
+    "Herrera\\Box\\Compactor\\Php"
+  ],
+  "extract": true,
+  "git-commit": "git-commit",
+  "git-version": "git-version",
+
+  "replacements": {
+    "manifest_url": "https://box-project.github.io/box2/manifest.json"
+  },
+  "stub": true
+}
