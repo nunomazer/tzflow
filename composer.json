@@ -15,7 +15,8 @@
         "torzer/gitlab-client": "^0",
         "symfony/console": "^3.4",
         "league/climate": "^3.2",
-        "phlak/config": "^3.0"
+        "phlak/config": "^3.0",
+        "nesbot/carbon": "^1.22"
     },
     "autoload": {
         "psr-4": {"Tzflow\\": "./"}

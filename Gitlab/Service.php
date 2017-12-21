@@ -32,6 +32,10 @@ class Service
             $cm = new MR();
         }
 
+        if ($command->getName() == 'mr-merge') {
+            $cm = new AcceptMR();
+        }
+
         $cm->handle($this, $command, $input);
     }
 }
