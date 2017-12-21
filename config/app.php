@@ -171,11 +171,11 @@ return [
         /*
          * Application Service Providers...
          */
-        App\Providers\AppServiceProvider::class,
-        App\Providers\AuthServiceProvider::class,
-        // App\Providers\BroadcastServiceProvider::class,
-        App\Providers\EventServiceProvider::class,
-        App\Providers\RouteServiceProvider::class,
+        Tzflow\Providers\AppServiceProvider::class,
+        Tzflow\Providers\AuthServiceProvider::class,
+        // Tzflow\Providers\BroadcastServiceProvider::class,
+        Tzflow\Providers\EventServiceProvider::class,
+        Tzflow\Providers\RouteServiceProvider::class,
 
     ],
 

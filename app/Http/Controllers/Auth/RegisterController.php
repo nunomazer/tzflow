@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Http\Controllers\Auth;
+namespace Tzflow\Http\Controllers\Auth;
 
-use App\User;
-use App\Http\Controllers\Controller;
+use Tzflow\User;
+use Tzflow\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
 
