@@ -15,7 +15,8 @@ use Symfony\Component\Console\Formatter\OutputFormatterStyle;
  *
  * @author nunomazer
  */
-abstract class BaseCommand extends Command {
+abstract class BaseCommand extends Command
+{
 
     protected $name = 'command:name';
 
@@ -23,43 +24,32 @@ abstract class BaseCommand extends Command {
 
     protected $help = 'This is the help of this command';
 
-    protected $climate = null;
+    public $climate = null;
+
+    /**
+     * From here to be used by concret classes
+     */
+
+    public $service = null;
+
+    public $driver = 'gitlab';
 
     public function __construct($name = null)
     {
         parent::__construct($name);
 
         $this->climate = new CLImate();
+
+        $this->driver = config('driver', 'gitlab');
+
+        $serviceClass = 'Tzflow\\' . ucfirst($this->driver) . '\\Service';
+
+        $this->service = new $serviceClass();
     }
 
-    protected function whisper($text)
-    {
-        $this->climate->whisper($text);
-    }
-
-    protected function shout($text)
-    {
-        $this->climate->shout($text);
-    }
-
-    protected function line($text)
+    public function line($text)
     {
         $this->climate->gray($text);
-    }
-
-    protected function comment($text)
-    {
-        $this->climate->comment($text);
-    }
-
-    protected function info($text)
-    {
-        $this->climate->info($text);
-    }
-
-    protected function error($text)
-    {
-        $this->climate->error($text);
     }
 
     protected function configure()
@@ -74,37 +64,47 @@ abstract class BaseCommand extends Command {
     /**
      * Print logo
      */
-    protected function displayLogo() {
-        $this->comment(".___________.  ______   .______      ________   _______ .______      ");
-        $this->comment("|           | /  __  \  |   _  \    |       /  |   ____||   _  \     ");
-        $this->comment("`---|  |----`|  |  |  | |  |_)  |   `---/  /   |  |__   |  |_)  |    ");
-        $this->comment("    |  |     |  |  |  | |      /       /  /    |   __|  |      /     ");
-        $this->comment("    |  |     |  `--'  | |  |\  \----. /  /----.|  |____ |  |\  \----.");
-        $this->comment("    |__|      \______/  | _| `._____|/________||_______|| _| `._____|");
-        $this->comment("");
+    public function displayLogo()
+    {
+        $this->climate->comment(".___________.  ______   .______      ________   _______ .______      ");
+        $this->climate->comment("|           | /  __  \  |   _  \    |       /  |   ____||   _  \     ");
+        $this->climate->comment("`---|  |----`|  |  |  | |  |_)  |   `---/  /   |  |__   |  |_)  |    ");
+        $this->climate->comment("    |  |     |  |  |  | |      /       /  /    |   __|  |      /     ");
+        $this->climate->comment("    |  |     |  `--'  | |  |\  \----. /  /----.|  |____ |  |\  \----.");
+        $this->climate->comment("    |__|      \______/  | _| `._____|/________||_______|| _| `._____|");
+        $this->climate->comment("");
         $this->climate->whisper()->flank(" developed with ♥ by < torzer.com > team - version ." . $this->version(), '*', 7);
         $this->line('');
     }
 
-    protected function displayHeader($text)
+    public function displayHeader($text)
     {
         $this->climate->border();
         $this->climate->br();
-        $this->climate->flank('<bold>'.$text.'</bold>', '  *  ');
+        $this->climate->flank('<bold>' . $text . '</bold>', '  *  ');
         $this->climate->br();
         $this->climate->border();
         $this->climate->br();
     }
 
-    protected function version() {
+    public function handle($headerText = 'Executing command', InputInterface $input, OutputInterface $output)
+    {
+        $this->displayLogo();
+        $this->displayHeader($headerText);
+        $this->service->handle($this, $input);
+    }
+
+    protected function version()
+    {
         return exec('git describe --tags --abbrev=0');
     }
 
 
-    protected function getSource() {
+    public function getSource(InputInterface $input)
+    {
         $source = exec('git rev-parse --abbrev-ref HEAD');
-        if ($this->option('source')) {
-            $source = $this->option('source');
+        if ($input->getOption('source')) {
+            $source = $input->getOption('source');
         }
 
         return $source;

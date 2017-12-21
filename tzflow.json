@@ -1,0 +1,17 @@
+{
+  "driver": "gitlab",
+
+  "gitlab": {
+    "project": {
+      "id": 202020
+    },
+    "api": {
+      "token": "slkjfsldkjlskdjflsdkjf"
+    },
+    "default": {
+      "mr": {
+        "target-branch": "dev"
+      }
+    }
+  }
+}

@@ -16,6 +16,7 @@ $app = new Application('tzflow - a git flow productive application', 'by http://
 
 $app->addCommands([
         new \Tzflow\Commands\Info(),
+        new \Tzflow\Commands\MR(),
 ]);
 
 $app->run();

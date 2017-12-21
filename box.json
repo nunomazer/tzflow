@@ -5,10 +5,12 @@
 
   "directories": [
     "Commands",
+    "Gitlab",
     "vendor"
   ],
   "files": [
-    "tzflow"
+    "tzflow",
+    "Git.php"
   ],
   "finder": [
     {
