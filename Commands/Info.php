@@ -20,6 +20,28 @@ class Info extends BaseCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $this->displayLogo();
+
+        $padding = $this->climate->padding(40);
+
+        $this->climate->border();
+        $this->climate->flank('tzflow.json configuration used in this folder', ' ', 10);
+        $this->climate->border();
+
+        $driver = config('driver');
+
+        $data = [
+            ['driver', $driver, 'background_light_red'],
+            ['project.id', config($driver.'.project.id')],
+        ];
+
+        foreach ($data as $index => $item) {
+            $pre = isset($item[2]) ? '<'.$item[2].'>' : '';
+            $pos = isset($item[2]) ? '</'.$item[2].'>' : '';
+            $padding->label('<bold>'.$item[0].'</bold>')->result($pre.' '.$item[1].' '.$pos);
+        }
+
+        $this->climate->br();
+
     }
 
 }
