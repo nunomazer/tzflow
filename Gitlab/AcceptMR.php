@@ -251,7 +251,7 @@ class AcceptMR
 
     protected function showExecOutput($out) {
         foreach ($out as $line) {
-            $this->line($line);
+            $this->command->climate->out($line);
         }
     }
 }
