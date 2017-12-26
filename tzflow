@@ -6,6 +6,16 @@ use Symfony\Component\Console\Application;
 
 if ( ! function_exists('config')) {
     function config($key, $default = null) {
+        if (file_exists('./tzflow.json') === false) {
+            $climate = new \League\CLImate\CLImate();
+
+            $climate->br();
+            $climate->backgroundRed()->white('File <bold>tzflow.json</bold> not found in this folder !!');
+            $climate->out('See https://github.com/torzer/tzflow for documentation');
+            $climate->br();
+
+            die();
+        }
         $config =  new PHLAK\Config\Config('./tzflow.json');
 
         return $config->get($key, $default);
