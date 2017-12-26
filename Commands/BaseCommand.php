@@ -3,6 +3,7 @@
 namespace Tzflow\Commands;
 
 use League\CLImate\CLImate;
+use Povils\Figlet\Figlet;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -73,14 +74,17 @@ abstract class BaseCommand extends Command
      */
     public function displayLogo()
     {
-        $this->climate->comment(".___________.  ______   .______      ________   _______ .______      ");
-        $this->climate->comment("|           | /  __  \  |   _  \    |       /  |   ____||   _  \     ");
-        $this->climate->comment("`---|  |----`|  |  |  | |  |_)  |   `---/  /   |  |__   |  |_)  |    ");
-        $this->climate->comment("    |  |     |  |  |  | |      /       /  /    |   __|  |      /     ");
-        $this->climate->comment("    |  |     |  `--'  | |  |\  \----. /  /----.|  |____ |  |\  \----.");
-        $this->climate->comment("    |__|      \______/  | _| `._____|/________||_______|| _| `._____|");
-        $this->climate->comment("");
-        $this->climate->whisper()->flank(" developed with ♥ by < torzer.com > team - version ." . $this->version(), '*', 7);
+//        $this->climate->comment(".___________.  ______   .______      ________   _______ .______      ");
+//        $this->climate->comment("|           | /  __  \  |   _  \    |       /  |   ____||   _  \     ");
+//        $this->climate->comment("`---|  |----`|  |  |  | |  |_)  |   `---/  /   |  |__   |  |_)  |    ");
+//        $this->climate->comment("    |  |     |  |  |  | |      /       /  /    |   __|  |      /     ");
+//        $this->climate->comment("    |  |     |  `--'  | |  |\  \----. /  /----.|  |____ |  |\  \----.");
+//        $this->climate->comment("    |__|      \______/  | _| `._____|/________||_______|| _| `._____|");
+//        $this->climate->comment("");
+        $figlet = new Figlet();
+        $figlet->setFont('univers');
+        $this->climate->comment($figlet->render('torzer'));
+        $this->climate->whisper()->flank(" developed with <red>♥</red> by < <yellow>torzer.com</yellow> > team - version ." . $this->version(), '*', 7);
         $this->line('');
     }
 
