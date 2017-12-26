@@ -29,12 +29,24 @@ class Service
 
     public function handle(BaseCommand $command, InputInterface $input, OutputInterface $output)
     {
+
+        $prj = $this->gl->getProject($this->project_id);
+
+        $command->climate->yellow()->flank('Running tzflow at project: <background_yellow><white>' . $prj->name_with_namespace . '</white></background_yellow>');
+        $command->climate->yellow()->flank('URL: ' . config('gitlab.api.url', 'https://gitlab.com/api/v4/'));
+
+        $command->climate->br(2);
+
         if ($command->getName() == 'mr') {
             $cm = new MR();
         }
 
         if ($command->getName() == 'mr-merge') {
             $cm = new AcceptMR();
+        }
+
+        if ($command->getName() == 'run') {
+            $cm = new Run();
         }
 
         $cm->handle($this, $command, $input, $output);

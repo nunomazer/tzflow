@@ -18,6 +18,7 @@ $app->addCommands([
         new \Tzflow\Commands\Info(),
         new \Tzflow\Commands\MR(),
         new \Tzflow\Commands\AcceptMR(),
+        new \Tzflow\Commands\Run(),
 ]);
 
 $app->run();
