@@ -59,6 +59,13 @@ abstract class BaseCommand extends Command
         $this->setName($this->name);
         $this->setDescription($this->description);
         $this->setHelp($this->help);
+
+        $this->addOption(
+            'no-logo',
+            null,
+            InputOption::VALUE_OPTIONAL,
+            'Do not show logo information'
+        );
     }
 
     /**
@@ -89,7 +96,9 @@ abstract class BaseCommand extends Command
 
     public function handle($headerText = 'Executing command', InputInterface $input, OutputInterface $output)
     {
-        $this->displayLogo();
+        if ($input->getOption('no-logo') == false) {
+            $this->displayLogo();
+        }
         $this->displayHeader($headerText);
         $this->service->handle($this, $input, $output);
     }
