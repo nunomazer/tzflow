@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "4e8f3a3ca4275a0159f555b2b3e52b71",
+    "content-hash": "3ed7eb0af7e2b40eafd5705293230a72",
     "packages": [
         {
             "name": "guzzlehttp/guzzle",
@@ -331,6 +331,58 @@
             ],
             "description": "Config loading and management",
             "time": "2017-09-10T06:50:57+00:00"
+        },
+        {
+            "name": "povils/figlet",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/povils/figlet.git",
+                "reference": "3eff59b66281e5b184d3bb37e206d4f7cccece07"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/povils/figlet/zipball/3eff59b66281e5b184d3bb37e206d4f7cccece07",
+                "reference": "3eff59b66281e5b184d3bb37e206d4f7cccece07",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4",
+                "symfony/console": "~3.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~4.2"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Povils\\Figlet\\": "src/Figlet"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Povilas Susinskas",
+                    "email": "povilassusinskas@gmail.com"
+                }
+            ],
+            "description": "Figlet text generator - PHP",
+            "keywords": [
+                "ascii",
+                "figlet",
+                "github",
+                "php",
+                "text"
+            ],
+            "time": "2016-12-28T14:27:44+00:00"
         },
         {
             "name": "psr/http-message",
@@ -834,7 +886,9 @@
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "povils/figlet": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
