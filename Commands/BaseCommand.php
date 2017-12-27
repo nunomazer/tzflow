@@ -64,7 +64,7 @@ abstract class BaseCommand extends Command
         $this->addOption(
             'no-logo',
             null,
-            InputOption::VALUE_OPTIONAL,
+            InputOption::VALUE_NONE,
             'Do not show logo information'
         );
     }
@@ -90,17 +90,23 @@ abstract class BaseCommand extends Command
 
     public function displayHeader($text)
     {
-        $this->climate->border();
+        $borderLenght = strlen($text)+5*3*2+2;
+
+//        $this->climate->border('-', $borderLenght);
+//        $this->climate->br();
+        $this->climate->flank('<bold>' . $text . '</bold>', '-\*/-');
         $this->climate->br();
-        $this->climate->flank('<bold>' . $text . '</bold>', '  *  ');
-        $this->climate->br();
-        $this->climate->border();
+//        $this->climate->border('-', $borderLenght);
         $this->climate->br();
     }
 
     public function handle($headerText = 'Executing command', InputInterface $input, OutputInterface $output)
     {
-        if ($input->getOption('no-logo') == false) {
+        $this->climate->clear();
+
+        $showLogo = ! $input->getOption('no-logo');
+
+        if ($showLogo) {
             $this->displayLogo();
         }
         $this->displayHeader($headerText);
