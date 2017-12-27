@@ -19,7 +19,7 @@ class Info extends BaseCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->displayLogo();
+        $this->handle('INFO', $input, $output);
 
         $padding = $this->climate->padding(40);
 
