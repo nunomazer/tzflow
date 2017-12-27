@@ -46,6 +46,7 @@ class Run
 
                 $arguments = [
                     'command' => $cmdName,
+                    '--no-logo' => true,
                 ];
 
                 $this->command->climate->br();
