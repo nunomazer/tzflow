@@ -5,6 +5,11 @@ require_once __DIR__ . '/vendor/autoload.php';
 use Symfony\Component\Console\Application;
 
 if (!function_exists('config')) {
+    /**
+     * @param $key
+     * @param null $default
+     * @return mixed
+     */
     function config($key, $default = null)
     {
         if (file_exists('./tzflow.json') === false) {
@@ -35,4 +40,9 @@ $app->addCommands([
     new \Tzflow\Commands\Run(),
 ]);
 
-$app->run();
+try {
+    $app->run();
+} catch (Exception $e) {
+    print $e->getMessage();
+    print $e->getTraceAsString();
+}
