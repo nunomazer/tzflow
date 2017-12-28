@@ -39,15 +39,6 @@ abstract class BaseCommand extends Command
 
         $this->climate = new CLImate();
 
-        if ($name <> 'init' && $name) {
-
-            $this->driver = config('driver', 'gitlab');
-
-            $serviceClass = 'Tzflow\\' . ucfirst($this->driver) . '\\Service';
-
-            $this->service = new $serviceClass();
-
-        }
     }
 
     public function line($text)
@@ -69,6 +60,16 @@ abstract class BaseCommand extends Command
             InputOption::VALUE_NONE,
             'Do not show logo information'
         );
+
+        if ($this->name <> 'init') {
+
+            $this->driver = config('driver', 'gitlab');
+
+            $serviceClass = 'Tzflow\\' . ucfirst($this->driver) . '\\Service';
+
+            $this->service = new $serviceClass();
+
+        }
     }
 
     /**
