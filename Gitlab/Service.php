@@ -37,6 +37,7 @@ class Service
 
         $command->climate->br(2);
 
+        $cm = null;
         if ($command->getName() == 'mr') {
             $cm = new MR();
         }
@@ -49,6 +50,8 @@ class Service
             $cm = new Run();
         }
 
-        $cm->handle($this, $command, $input, $output);
+        if ($cm) {
+            $cm->handle($this, $command, $input, $output);
+        }
     }
 }
