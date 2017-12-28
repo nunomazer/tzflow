@@ -52,9 +52,9 @@ class Init extends BaseCommand
             ]
         ];
 
-        if (file_put_contents('tzflow.json', json_encode($json))) {
+        if (file_put_contents('tzflow.json', json_encode($json, JSON_PRETTY_PRINT))) {
             $json['gitlab']['api']['token'] = 'should not version this value';
-            file_put_contents('tzflow.json.example', json_encode($json));
+            file_put_contents('tzflow.json.example', json_encode($json, JSON_PRETTY_PRINT));
 
             $this->climate->info('*** tzflow.json created ***');
             $this->climate->yellow('You should add the tzflow.json to .gitignore to protect your token');
