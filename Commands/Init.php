@@ -9,10 +9,9 @@
 namespace Tzflow\Commands;
 
 
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Input\InputOption;
+use Torzer\GitlabClient\Gitlab;
 
 class Init extends BaseCommand
 {
@@ -31,9 +30,29 @@ class Init extends BaseCommand
 
         $this->handle('INIT tzflow.json', $input, $output);
 
-        $driver = $this->climate->radio('Driver (hub repository):  ', ['gitlab'])->prompt();
-        $id = $this->climate->input('Project id at ' . $driver);
-        $token = $this->climate->input('Your token at ' . $driver);
+        do  {
+            $driver = $this->climate->radio('Driver (hub repository):  ', ['gitlab'])->prompt();
+        } while ($driver == '');
+
+        do {
+            $id = $this->climate->input('Project id at ' . $driver)->prompt();
+        } while ($id == '');
+
+        do {
+            $token = $this->climate->input('Your token at ' . $driver)->prompt();
+        } while ($token == '');
+
+
+        $this->climate->comment('Testing connection with project ... ');
+
+        if ($driver == 'gitlab') {
+            $hub = Gitlab::client($token);
+        }
+
+        $project = $hub->getProject($id);
+
+        $this->climate->info('Project ' . $project->name . ' found !!');
+
 
         $json = [
             "driver" => $driver,
