@@ -102,11 +102,10 @@ abstract class BaseCommand extends Command
 
     public function handle($headerText = 'Executing command', InputInterface $input, OutputInterface $output)
     {
-        $this->climate->clear();
-
         $showLogo = ! $input->getOption('no-logo');
 
         if ($showLogo) {
+            $this->climate->clear();
             $this->displayLogo();
         }
         $this->displayHeader($headerText);
