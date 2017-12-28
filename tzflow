@@ -4,8 +4,9 @@ require_once __DIR__ . '/vendor/autoload.php';
 
 use Symfony\Component\Console\Application;
 
-if ( ! function_exists('config')) {
-    function config($key, $default = null) {
+if (!function_exists('config')) {
+    function config($key, $default = null)
+    {
         if (file_exists('./tzflow.json') === false) {
             $climate = new \League\CLImate\CLImate();
 
@@ -17,7 +18,8 @@ if ( ! function_exists('config')) {
 
             die();
         }
-        $config =  new PHLAK\Config\Config('./tzflow.json');
+
+        $config = new PHLAK\Config\Config('./tzflow.json');
 
         return $config->get($key, $default);
     }
@@ -26,11 +28,11 @@ if ( ! function_exists('config')) {
 $app = new Application('tzflow - a git flow productive application', 'by http://torzer.com');
 
 $app->addCommands([
-        new \Tzflow\Commands\Init(),
-        new \Tzflow\Commands\Info(),
-        new \Tzflow\Commands\MR(),
-        new \Tzflow\Commands\AcceptMR(),
-        new \Tzflow\Commands\Run(),
+    new \Tzflow\Commands\Init(),
+    new \Tzflow\Commands\Info(),
+    new \Tzflow\Commands\MR(),
+    new \Tzflow\Commands\AcceptMR(),
+    new \Tzflow\Commands\Run(),
 ]);
 
 $app->run();
