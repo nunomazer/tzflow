@@ -7,9 +7,7 @@ use Povils\Figlet\Figlet;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Formatter\OutputFormatterStyle;
 
 /**
  * Description of BaseCommand
@@ -54,7 +52,7 @@ abstract class BaseCommand extends Command
 
     public function line($text)
     {
-        $this->climate->gray($text);
+        $this->climate->out($text);
     }
 
     protected function configure()
@@ -87,14 +85,15 @@ abstract class BaseCommand extends Command
 //        $this->climate->comment("");
         $figlet = new Figlet();
         $figlet->setFont('univers');
-        $this->climate->comment($figlet->render('torzer'));
-        $this->climate->whisper()->flank(" developed with <red>♥</red> by < <yellow>torzer.com</yellow> > team - version ." . $this->version(), '*', 7);
+        $this->climate->comment($figlet->render('tzflow'));
+        $this->climate->backgroundDarkGray()->flank("developed with <red>♥</red> by <bold><green>http://torzer.com</green></bold> team", '*', 10);
+        // - version ." . $this->version(), '*', 7);
         $this->line('');
     }
 
     public function displayHeader($text)
     {
-        $borderLenght = strlen($text)+5*3*2+2;
+        //$borderLenght = strlen($text)+5*3*2+2;
 
 //        $this->climate->border('-', $borderLenght);
 //        $this->climate->br();
