@@ -11,6 +11,7 @@ if ( ! function_exists('config')) {
 
             $climate->br();
             $climate->backgroundRed()->white('File <bold>tzflow.json</bold> not found in this folder !!');
+            $climate->yellow('Execute <bold>tzflow init</bold> to create this file.');
             $climate->out('See https://github.com/torzer/tzflow for documentation');
             $climate->br();
 
@@ -25,6 +26,7 @@ if ( ! function_exists('config')) {
 $app = new Application('tzflow - a git flow productive application', 'by http://torzer.com');
 
 $app->addCommands([
+        new \Tzflow\Commands\Init(),
         new \Tzflow\Commands\Info(),
         new \Tzflow\Commands\MR(),
         new \Tzflow\Commands\AcceptMR(),
