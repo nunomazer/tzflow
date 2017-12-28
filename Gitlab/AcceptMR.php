@@ -117,7 +117,7 @@ class AcceptMR
             if ($this->input->getOption('tag-after')) {
                 $this->command->climate->info('Tagging');
                 $this->service->gl->createTag($this->service->project_id, $this->input->getOption('tag-after'), $mr->target_branch);
-                $this->info('Branch ' . $mr->target_branch . ' tagged with name ' . $this->input->getOption('tag-after'));
+                $this->command->climate->info('Branch ' . $mr->target_branch . ' tagged with name ' . $this->input->getOption('tag-after'));
             }
         }
     }
@@ -166,7 +166,7 @@ class AcceptMR
                 'id' => $issue->iid,
                 'Title' => $issue->description,
                 'Auhor' => $issue->author->name,
-                'Assignee' => $issue->assignee->name,
+                'Assignee' => (isset($issue->assignee) AND is_object($issue->assignee)) ? $issue->assignee->name : '',
                 'Created' => Carbon::parse($issue->created_at)->toFormattedDateString(),
             ];
         }
