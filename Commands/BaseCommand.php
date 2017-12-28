@@ -41,11 +41,15 @@ abstract class BaseCommand extends Command
 
         $this->climate = new CLImate();
 
-        $this->driver = config('driver', 'gitlab');
+        if ($name <> 'init' && $name) {
 
-        $serviceClass = 'Tzflow\\' . ucfirst($this->driver) . '\\Service';
+            $this->driver = config('driver', 'gitlab');
 
-        $this->service = new $serviceClass();
+            $serviceClass = 'Tzflow\\' . ucfirst($this->driver) . '\\Service';
+
+            $this->service = new $serviceClass();
+
+        }
     }
 
     public function line($text)
@@ -94,7 +98,7 @@ abstract class BaseCommand extends Command
 
 //        $this->climate->border('-', $borderLenght);
 //        $this->climate->br();
-        $this->climate->flank('<bold>' . $text . '</bold>', '-\*/-');
+        $this->climate->flank('<bold>' . $text . '</bold>', '=');
         $this->climate->br();
 //        $this->climate->border('-', $borderLenght);
         $this->climate->br();
@@ -109,7 +113,10 @@ abstract class BaseCommand extends Command
             $this->displayLogo();
         }
         $this->displayHeader($headerText);
-        $this->service->handle($this, $input, $output);
+
+        if ($this->service) {
+            $this->service->handle($this, $input, $output);
+        }
     }
 
     protected function version()
