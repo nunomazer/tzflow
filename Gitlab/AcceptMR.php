@@ -39,7 +39,7 @@ class AcceptMR
             return $this->command->climate->error('Can\'t accept, MR <bold>!' . $this->mr_id . '</bold> is Merged or Closed already !!');
         }
 
-        if ($this->input->getOption('no-push') == false) {
+        if ($input->getOption('no-push') == false) {
             $push = $this->command->climate->confirm('PUSH changes before accept the MR?');
             if ($push->confirmed()) {
                 if (Git::push($this->command->getSource($this->input), $this->command) === false) return ;
