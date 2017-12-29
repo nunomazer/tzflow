@@ -13,6 +13,8 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Torzer\GitlabClient\Gitlab;
 use Tzflow\Commands\BaseCommand;
+use GuzzleHttp\Exception\ClientException;
+use Tzflow\Git;
 
 /**
  * Class MR - Merge Request for Gitlab repo
@@ -30,18 +32,16 @@ class MR
         $this->service = $service;
         $this->input = $input;
 
-        $target = $this->getTarget($input);
+        $target = $this->getTarget();
 
         $source = $this->command->getSource($input);
 
-        if ($input->getOption('no-push') == false) {
-            $push = $this->command->climate->confirm('PUSH changes before open the MR?');
-            if ($push->confirmed()) {
-                if (\Tzflow\Git::push($source, $this->command) === false) return;
-            }
-        }
+        $this->command->climate->info('Merge request from <red>'.$source.'</red> to <red>'.$target.'</red>');
 
-        $title = $this->getTitle($this->service->gl, $source, $service->project_id);
+        // handle push to remote
+        $this->push($source);
+
+        $title = $this->getTitle($this->service->gl, $source);
 
         $description = $this->getMRDescription($source);
 
@@ -93,7 +93,7 @@ class MR
 
                 $accept->run($argInput, $output);
             }
-        } catch (\GuzzleHttp\Exception\ClientException $ex) {
+        } catch (ClientException $ex) {
             $this->command->climate->info('');
             $this->command->climate->error('  Http status error: ' . $ex->getCode() . ' - ' . $ex->getResponse()->getReasonPhrase());
             $this->command->climate->error('  ' . $ex->getResponseBodySummary($ex->getResponse()));
@@ -101,6 +101,78 @@ class MR
         } catch (\Exception $ex) {
             $this->command->climate->error($ex->getMessage());
         }
+    }
+
+    protected function getTarget()
+    {
+        $target = config($this->command->driver.'.default.mr.target-branch');
+        if ($this->input->getOption('target')) {
+            $target = $this->input->getOption('target');
+        }
+
+        return $target;
+    }
+
+    protected function push($source)
+    {
+        /** @noinspection PhpUndefinedMethodInspection */
+        $ask = $this->input->getOption('no-push') == false && $this->input->getOption('push') == false;
+
+        $runPush = false;
+
+        if ($ask) {
+            $push = $this->command->climate->confirm('PUSH changes before open the MR?');
+            $runPush = $push->confirmed();
+        }
+
+        if ($runPush) {
+            if (Git::push($source, $this->command) === false) return;
+        }
+    }
+
+    protected function getTitle(Gitlab $gl, $source)
+    {
+        $issue = $this->getIssue($source);
+
+        if ($this->input->getOption('title')) {
+            $title = $this->input->getOption('title');
+        } else {
+            $title = 'Merge "' . $source . '" -> "' . $this->getTarget() . '"';
+
+            if ($issue > 0) {
+                $this->command->climate->info('Loading issue title ...');
+                $title = 'Resolve "' . $gl->getIssue($this->service->project_id, $issue)->title . '"';
+            }
+        }
+
+        if ($this->input->getOption('wip')) {
+            $title = 'WIP: ' . $title;
+        }
+
+        $this->command->climate->yellow('Title: ' . $title);
+        $this->command->climate->br();
+        return $title;
+
+    }
+
+    protected function getIssue($source)
+    {
+        return $issue = intval(explode('-', $source)[0]);
+    }
+
+    protected function getMRDescription($source)
+    {
+        $issue = $this->getIssue($source);
+        $description = null;
+        if ($this->input->getOption('description')) {
+            $description = $this->input->getOption('description');
+        } else {
+            if ($issue > 0) {
+                $description = 'Closes%20%23' . $issue;
+            }
+        }
+
+        return $description;
     }
 
     protected function askAssignee()
@@ -150,60 +222,5 @@ class MR
         }
 
         return $ml_id;
-    }
-
-    protected function getTarget()
-    {
-        $target = config($this->command->driver.'.default.mr.target-branch');
-        if ($this->input->getOption('target')) {
-            $target = $this->input->getOption('target');
-        }
-
-        return $target;
-    }
-
-    protected function getIssue($source)
-    {
-        return $issue = intval(explode('-', $source)[0]);
-    }
-
-    protected function getTitle(Gitlab $gl, $source, $project_id)
-    {
-        $issue = $this->getIssue($source);
-
-        if ($this->input->getOption('title')) {
-            $title = $this->input->getOption('title');
-        } else {
-            $title = 'Merge "' . $source . '" -> "' . $this->getTarget() . '"';
-
-            if ($issue > 0) {
-                $this->command->climate->info('Loading issue title ...');
-                $title = 'Resolve "' . $gl->getIssue($this->service->project_id, $issue)->title . '"';
-            }
-        }
-
-        if ($this->input->getOption('wip')) {
-            $title = 'WIP: ' . $title;
-        }
-
-        $this->command->climate->yellow('Title: ' . $title);
-        $this->command->climate->br();
-        return $title;
-
-    }
-
-    protected function getMRDescription($source)
-    {
-        $issue = $this->getIssue($source);
-        $description = null;
-        if ($this->input->getOption('description')) {
-            $description = $this->input->getOption('description');
-        } else {
-            if ($issue > 0) {
-                $description = 'Closes%20%23' . $issue;
-            }
-        }
-
-        return $description;
     }
 }

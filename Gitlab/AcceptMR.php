@@ -9,6 +9,7 @@
 namespace Tzflow\Gitlab;
 
 use Carbon\Carbon;
+use GuzzleHttp\Exception\ClientException;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Torzer\GitlabClient\Gitlab;
@@ -42,7 +43,7 @@ class AcceptMR
         if ($input->getOption('no-push') == false) {
             $push = $this->command->climate->confirm('PUSH changes before accept the MR?');
             if ($push->confirmed()) {
-                if (Git::push($this->command->getSource($this->input), $this->command) === false) return ;
+                if (Git::push($this->command->getSource($this->input), $this->command) === false) return false;
             }
         }
 
@@ -80,9 +81,9 @@ class AcceptMR
 
                 $this->afterMerge($mr);
 
-                return;
+                return true;
 
-            } catch (\GuzzleHttp\Exception\ClientException $ex) {
+            } catch (ClientException $ex) {
                 $this->command->climate->info('');
                 $this->command->climate->error('  Http status error: ' . $ex->getCode() . ' - ' . $ex->getResponse()->getReasonPhrase());
                 $this->command->climate->error('  ' . $ex->getResponseBodySummary($ex->getResponse()));
@@ -97,7 +98,7 @@ class AcceptMR
 
                         $this->afterMerge($mr);
 
-                        return;
+                        return true;
                     }
                 }
             }
@@ -201,7 +202,7 @@ class AcceptMR
 
             $diff = explode(PHP_EOL, $change->diff);
 
-            foreach ($diff as $key => $line) {
+            foreach ($diff as $index => $line) {
                 if (substr($line, 0, 1) == '@') {
                     $this->command->climate->out($line);
                 }
@@ -224,6 +225,8 @@ class AcceptMR
         }
 
         $this->command->climate->blue()->flank('End of changes.');
+
+        return true;
 
     }
 

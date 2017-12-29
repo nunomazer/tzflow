@@ -9,7 +9,6 @@
 namespace Tzflow\Commands;
 
 
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -53,10 +52,17 @@ class MR extends BaseCommand
         );
 
         $this->addOption(
+            'push',
+            null,
+            InputOption::VALUE_NONE,
+            'If passed then push without confirmation the current branch to remote origin before open MR'
+        );
+
+        $this->addOption(
             'no-push',
             null,
             InputOption::VALUE_NONE,
-            'If passed then don\'t push current branch to remote origin before open MR'
+            'If passed then don\'t push and don\'t ask to, current branch to remote origin before open MR'
         );
 
         $this->addOption(

@@ -8,6 +8,7 @@
 
 namespace Tzflow\Gitlab;
 
+use GuzzleHttp\Exception\ClientException;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -83,7 +84,7 @@ class Run
             }
 
 
-        } catch (\GuzzleHttp\Exception\ClientException $ex) {
+        } catch (ClientException $ex) {
             $this->command->climate->info('');
             $this->command->climate->error('  Http status error: ' . $ex->getCode() . ' - ' . $ex->getResponse()->getReasonPhrase());
             $this->command->climate->error('  ' . $ex->getResponseBodySummary($ex->getResponse()));
