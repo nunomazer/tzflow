@@ -37,6 +37,11 @@ class Run
 
             $commands = config('flow.'.$flowName);
 
+            if ($commands == null) {
+                $this->command->climate->error('Flow <background_red><white> '.$flowName.' </white></background_red> not found in tzflow.json config file!!');
+                die();
+            }
+
             foreach ($commands as $key => $cmd) {
 
                 $cmdName = $cmd['command'];
