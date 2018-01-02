@@ -96,8 +96,13 @@ class Run
 
     protected function askArgumentValue($arg)
     {
+        if ($arg == '--tag-after') {
+            $this->service->listTags();
+        }
+
         $ask = $this->command->climate->input('Please enter the value for the argument/option:<bold><green>' . $arg . '</green></bold>');
         return $ask->prompt();
     }
+
 
 }

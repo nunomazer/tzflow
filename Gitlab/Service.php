@@ -9,6 +9,7 @@
 namespace Tzflow\Gitlab;
 
 
+use League\CLImate\CLImate;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Torzer\GitlabClient\Gitlab;
@@ -43,6 +44,10 @@ class Service
         $command->climate->br(2);
 
         $cm = null;
+        if ($command->getName() == 'info') {
+            $cm = new Info();
+        }
+
         if ($command->getName() == 'mr') {
             $cm = new MR();
         }
@@ -58,5 +63,20 @@ class Service
         if ($cm) {
             $cm->handle($this, $command, $input, $output);
         }
+    }
+
+    public function listTags()
+    {
+        $climate = new CLImate();
+
+        $tags = $this->gl->getTags($this->project_id);
+
+        $climate->info('Project TAGS:');
+        $data = [];
+        foreach ($tags as $tag) {
+            $data[] = $tag->name;
+        }
+
+        $climate->columns($data);
     }
 }
