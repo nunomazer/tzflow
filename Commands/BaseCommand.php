@@ -35,10 +35,10 @@ abstract class BaseCommand extends Command
 
     public function __construct($name = null)
     {
-        parent::__construct($name);
-
+        // parent_constructor calls configure, so we need climate being instantiated before
         $this->climate = new CLImate();
 
+        parent::__construct($name);
     }
 
     public function line($text)
