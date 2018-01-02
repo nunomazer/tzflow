@@ -23,6 +23,11 @@ class Service
 
     public function __construct()
     {
+        $this->loadDriverSettings();
+    }
+
+    public function loadDriverSettings()
+    {
         $this->gl = Gitlab::client(config('gitlab.api.token'), config('gitlab.api.url', 'https://gitlab.com/api/v4/'));
         $this->project_id = config('gitlab.project.id');
     }
