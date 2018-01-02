@@ -30,7 +30,7 @@ class Init extends BaseCommand
 
         $this->handle('INIT tzflow.json', $input, $output);
 
-        do  {
+        do {
             $driver = $this->climate->radio('Driver (hub repository):  ', ['gitlab'])->prompt();
         } while ($driver == '');
 
@@ -42,21 +42,28 @@ class Init extends BaseCommand
             $token = $this->climate->input('Your token at ' . $driver)->prompt();
         } while ($token == '');
 
+        $url = $this->climate->input('Api url, press enter to use the default of the driver ' . $driver)->prompt();
 
         $this->climate->comment('Testing connection with project ... ');
 
         if ($driver == 'gitlab') {
-            $hub = Gitlab::client($token);
+            if ($url <> '') {
+                $hub = Gitlab::client($token, $url);
+            } else {
+                $hub = Gitlab::client($token);
+            }
         }
 
         $project = $hub->getProject($id);
 
         $this->climate->info('Project ' . $project->name . ' found !!');
 
-
         $json = [
             "driver" => $driver,
-            "gitlab" => [
+        ];
+
+        if ($driver == 'gitlab') {
+            $json["gitlab"] = [
                 "project" => [
                     "id" => $id,
                 ],
@@ -68,8 +75,12 @@ class Init extends BaseCommand
                         "target-branch" => "dev",
                     ]
                 ]
-            ]
-        ];
+            ];
+
+            if ($url <> '') {
+                $json['gitlab']['api']['url'] = $url;
+            }
+        }
 
         if (file_put_contents('tzflow.json', json_encode($json, JSON_PRETTY_PRINT))) {
             $json['gitlab']['api']['token'] = 'should not version this value';
