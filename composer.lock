@@ -841,16 +841,16 @@
         },
         {
             "name": "torzer/gitlab-client",
-            "version": "0.1.0",
+            "version": "0.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/torzer/gitlab-client.git",
-                "reference": "a7d7d41bd67e0eefd3781403c168ab6c0210b56c"
+                "reference": "cf5bfe66aab7adbce6b5914b888d6efc201b6460"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/torzer/gitlab-client/zipball/a7d7d41bd67e0eefd3781403c168ab6c0210b56c",
-                "reference": "a7d7d41bd67e0eefd3781403c168ab6c0210b56c",
+                "url": "https://api.github.com/repos/torzer/gitlab-client/zipball/cf5bfe66aab7adbce6b5914b888d6efc201b6460",
+                "reference": "cf5bfe66aab7adbce6b5914b888d6efc201b6460",
                 "shasum": ""
             },
             "require": {
@@ -880,7 +880,7 @@
                 "gitlab",
                 "rest"
             ],
-            "time": "2017-06-16T14:43:14+00:00"
+            "time": "2018-01-02T15:36:57+00:00"
         }
     ],
     "packages-dev": [],
