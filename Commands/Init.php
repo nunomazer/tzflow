@@ -30,16 +30,35 @@ class Init extends BaseCommand
 
         $this->handle('INIT tzflow.json', $input, $output);
 
+        $json = null;
+        if (file_exists('./tzflow.json')) {
+            $json = json_decode(file_get_contents('./tzflow.json'), true);
+        }
+
         do {
             $driver = $this->climate->radio('Driver (hub repository):  ', ['gitlab'])->prompt();
         } while ($driver == '');
 
         do {
-            $id = $this->climate->input('Project id at ' . $driver)->prompt();
+            $txt = 'Project id at ' . $driver ;
+            if ($json) {
+                $txt .= ' [' . $json[$driver]['project']['id'] . ']';
+            }
+            $id = $this->climate->input($txt)->prompt();
+            if ($json AND $id == '') {
+                $id = $json[$driver]['project']['id'];
+            }
         } while ($id == '');
 
         do {
-            $token = $this->climate->input('Your token at ' . $driver)->prompt();
+            $txt = 'Your token at ' . $driver ;
+            if ($json) {
+                $txt .= ' [' . $json[$driver]['api']['token'] . ']';
+            }
+            $token = $this->climate->input($txt)->prompt();
+            if ($json AND $token == '') {
+                $token = $json[$driver]['api']['token'];
+            }
         } while ($token == '');
 
         $url = $this->climate->input('Api url, press enter to use the default of the driver ' . $driver)->prompt();
@@ -57,6 +76,37 @@ class Init extends BaseCommand
         $project = $hub->getProject($id);
 
         $this->climate->info('Project ' . $project->name . ' found !!');
+
+        $flow['default'] = [
+            "command" => "mr",
+            "args" => [
+                "--target" => "dev",
+                "--merge" => true,
+                "--remove-source" => true,
+                "--update-local" => true
+            ]
+        ];
+
+        $createFlow = null;
+        do {
+            if (is_object($createFlow) AND $createFlow->confirmed()) {
+                do {
+                    $flowName = $this->climate->input('Flow name ')->prompt();
+                } while ($flowName == '');
+
+                $flow[$flowName] = ['command' => 'mr'];
+
+                do {
+                    $argsQuestion = $this->climate->checkboxes('Choose the arguments for mr command:', [
+                        '--merge', '--push', '--no-push', '--remove-source', '--update-local', '--tag-after'
+                    ]);
+                    $args = $argsQuestion->prompt();
+                } while ($args == '');
+
+
+            }
+            $createFlow = $this->climate->confirm('Create a new flow to several steps execution?');
+        } while ($createFlow->confirmed() == 'y');
 
         $json = [
             "driver" => $driver,
@@ -81,6 +131,8 @@ class Init extends BaseCommand
                 $json['gitlab']['api']['url'] = $url;
             }
         }
+
+        $json['flow'] = $flow;
 
         if (file_put_contents('tzflow.json', json_encode($json, JSON_PRETTY_PRINT))) {
             $json['gitlab']['api']['token'] = 'should not version this value';
